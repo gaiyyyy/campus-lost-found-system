@@ -36,14 +36,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { createLostItem, updateLostItem, getLostItemDetail } from '../../api/lostItem'
 import { useRouter, useRoute } from 'vue-router'
 import dayjs from 'dayjs'
 
 const props = defineProps({
-  isEdit: Boolean
+  isEdit: Boolean,
+  redirectAfterSubmit: { type: String, default: '' }
 })
 
 const router = useRouter()
@@ -72,6 +73,7 @@ onMounted(async () => {
   }
 })
 
+
 const submit = async () => {
   try {
     await formRef.value.validate()
@@ -87,11 +89,32 @@ const submit = async () => {
   }
 
 
+  // try {
+  //   if (props.isEdit) {
+  //     await updateLostItem(route.params.id, submitData)
+  //     ElMessage.success('修改成功')
+  //     router.push(`/lost_item/${route.params.id}`)
+  //   } else {
+  //     await createLostItem(submitData)
+  //     ElMessage.success('发布成功')
+  //     router.push('/lost_item/list')
+  //   }
+  // } catch (err) {
+  //   ElMessage.error('提交失败')
+  //   console.error(err)
+  // }
+
   try {
     if (props.isEdit) {
       await updateLostItem(route.params.id, submitData)
       ElMessage.success('修改成功')
-      router.push(`/lost_item/${route.params.id}`)
+      // 优先使用 props.redirectAfterSubmit，其次使用路由 query.redirect，最后回 detail
+      const redirectTarget = props.redirectAfterSubmit || route.query.redirect || ''
+      if (redirectTarget) {
+        router.push(redirectTarget)
+      } else {
+        router.push(`/lost_item/${route.params.id}`)
+      }
     } else {
       await createLostItem(submitData)
       ElMessage.success('发布成功')
@@ -101,6 +124,9 @@ const submit = async () => {
     ElMessage.error('提交失败')
     console.error(err)
   }
+
+
+
 }
 
 </script>

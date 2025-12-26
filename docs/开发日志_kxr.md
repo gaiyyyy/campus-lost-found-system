@@ -60,6 +60,8 @@
 
 ![image-20251223204521341](C:\Users\LENOVO\AppData\Roaming\Typora\typora-user-images\image-20251223204521341.png)
 
+## 2.首页页面
+
 # 12.24
 
 ## 1.失物信息前端（详情页、添加、编辑）
@@ -93,6 +95,12 @@ lostTime: dayjs(form.value.lostTime).format('YYYY-MM-DD HH:mm:ss')
 
 
 
+# 12.26
 
+## 1.完成个人中心前端（失物部分）
 
-美化页面
+![image-20251226164615801](C:\Users\LENOVO\AppData\Roaming\Typora\typora-user-images\image-20251226164615801.png)
+
+## 2.调整页面逻辑
+
+## 3.完成页面美化

@@ -52,8 +52,8 @@ const load = async () => {
 const goDetail = id => router.push(`/lost_item/${id}`)
 const goNew = () => router.push('/lost_item/new')
 const goHome = () => {
-      router.push('/home')
-    };
+  router.push('/home')
+};
 
 onMounted(load)
 </script>

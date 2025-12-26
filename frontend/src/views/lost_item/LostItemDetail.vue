@@ -51,7 +51,8 @@ const load = async () => {
 }
 
 const edit = () => {
-  router.push(`/lost_item/edit/${route.params.id}`)
+  const redirect = `/lost_item/${route.params.id}`
+  router.push({ path: `/lost_item/edit/${route.params.id}`, query: { redirect } })
 }
 
 const markFound = async () => {
@@ -64,7 +65,13 @@ const remove = async () => {
   await ElMessageBox.confirm('确认删除？')
   await deleteLostItem(route.params.id)
   ElMessage.success('删除成功')
-  router.push('/lost_item/list')
+  // 如果来自某处跳转过来，优先回到该处，否则返回列表
+  const redirect = route.query.redirect
+  if (redirect) {
+    router.push(redirect)
+  } else {
+    router.push('/lost_item/list')
+  }
 }
 
 

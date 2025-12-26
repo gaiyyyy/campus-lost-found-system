@@ -31,3 +31,11 @@ export const updateLostItemStatus = (id, status) => {
     params: { status }
   })
 }
+
+// 获取当前用户发布的失物
+export const getMyLostItems = () => {
+  return axios.get('/lost_item')  // 不传 user_id
+              .then(res => res)  // axios 拦截器已经返回 res.data
+}
+
+
