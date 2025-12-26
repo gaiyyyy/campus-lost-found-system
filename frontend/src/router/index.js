@@ -1,46 +1,88 @@
-
+// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
 
+// 主界面
+import Home from '../views/Home.vue'
+
+// 用户模块
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Profile from '../views/Profile.vue'
 
+// 失物模块
+import LostItemList from '../views/lost_item/LostItemList.vue'
+import LostItemNew from '../views/lost_item/LostItemNew.vue'
+import LostItemDetail from '../views/lost_item/LostItemDetail.vue'
+import LostItemEdit from '../views/lost_item/LostItemEdit.vue'
+
 const routes = [
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: Register
-  },
+  // 默认入口
+  { path: '/', redirect: '/home' },
+
+  // 主界面
+  { path: '/home', name: 'Home', component: Home },
+
+  // 用户模块
+  { path: '/login', name: 'Login', component: Login },
+  { path: '/register', name: 'Register', component: Register },
   {
     path: '/profile',
     name: 'Profile',
     component: Profile,
-    meta: { requiresAuth: true } // 需要登录才能访问
+    meta: { requiresAuth: true },
+  },
+
+  // 失物模块
+  {
+    path: '/lost_item/list',
+    name: 'LostItemList',
+    component: LostItemList,
   },
   {
-    path: '/',
-    redirect: '/login' // 默认路由跳转到登录页
-  }
+    path: '/lost_item/new',
+    name: 'LostItemNew',
+    component: LostItemNew,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/lost_item/:id',
+    name: 'LostItemDetail',
+    component: LostItemDetail,
+  },
+  {
+    path: '/lost_item/edit/:id',
+    name: 'LostItemEdit',
+    component: LostItemEdit,
+    meta: { requiresAuth: true },
+  },
+
+  // 404
+  { path: '/:pathMatch(.*)*', redirect: '/home' },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 })
 
-// 全局守卫
+// 全局前置守卫
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
+  const role = localStorage.getItem('role') // USER / ADMIN
+
+  // 需要登录但没登录
   if (to.meta.requiresAuth && !token) {
     next('/login')
-  } else {
-    next()
+    return
   }
+
+  // 需要管理员权限
+  if (to.meta.requiresAdmin && role !== 'ADMIN') {
+    next('/home')
+    return
+  }
+
+  next()
 })
 
 export default router

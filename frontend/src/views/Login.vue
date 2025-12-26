@@ -21,7 +21,8 @@
 <script>
 import { useRouter } from 'vue-router' // 导入 useRouter
 import { reactive, ref } from 'vue'
-import axios from 'axios'
+import axios from '../api/axios'
+
 
 export default {
   name: 'Login',
@@ -38,11 +39,11 @@ export default {
     const handleLogin = async () => {
       errorMessage.value = ''
       try {
-        const res = await axios.post('http://localhost:8080/api/login', loginForm)
-        localStorage.setItem('token', res.data.token)
-        localStorage.setItem('username', res.data.username)
-        alert(`登录成功，欢迎 ${res.data.username}`)
-        router.push('/profile') 
+        const res = await axios.post('/api/login', loginForm)
+        localStorage.setItem('token', res.token)
+        localStorage.setItem('username', res.username)
+        alert(`登录成功，欢迎 ${res.username}`)
+        router.push('/profile')
       } catch (err) {
         if (err.response && err.response.data && err.response.data.message) {
           errorMessage.value = err.response.data.message
@@ -51,6 +52,7 @@ export default {
         }
       }
     }
+
 
     return { loginForm, loginFormRef, handleLogin, errorMessage }
   }

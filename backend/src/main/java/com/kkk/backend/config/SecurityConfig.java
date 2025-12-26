@@ -50,7 +50,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:5174"); // 前端地址
+        configuration.addAllowedOrigin("http://localhost:5173"); // 前端地址
         configuration.addAllowedMethod("*"); // GET, POST, PUT, DELETE ...
         configuration.addAllowedHeader("*"); // 所有请求头
         configuration.setAllowCredentials(true); // 允许携带 cookie

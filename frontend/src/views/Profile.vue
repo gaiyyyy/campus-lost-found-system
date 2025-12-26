@@ -4,6 +4,7 @@
     <p>用户名：{{ user.username }}</p>
     <p>角色：{{ user.role }}</p>
     <el-button type="danger" @click="logout">退出登录</el-button>
+    <el-button type="info"  @click="goHome">返回首页</el-button>
   </el-card>
 </template>
 
@@ -34,9 +35,13 @@ export default {
       router.push('/login')
     }
 
+    const goHome = () => {
+      router.push('/home')
+    };
+
     fetchProfile()
 
-    return { user, logout }
+    return { user, logout, goHome }
   }
 }
 </script>

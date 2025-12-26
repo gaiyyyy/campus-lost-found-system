@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from '../api/axios'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
