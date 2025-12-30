@@ -34,17 +34,17 @@
               <el-tag :type="getCategoryTagType(item.category)" size="small">
                 {{ item.category }}
               </el-tag>
-              <el-tag 
-                :type="item.status === 0 ? 'warning' : 'success'" 
-                size="small" 
+              <el-tag
+                :type="item.status === 0 ? 'warning' : 'success'"
+                size="small"
                 effect="dark"
                 class="status-tag"
               >
-                {{ item.status === 0 ? '未找回' : '已找回' }}
+                {{ item.status === 0 ? "未找回" : "已找回" }}
               </el-tag>
             </div>
           </div>
-          
+
           <!-- 操作按钮 -->
           <div class="action-area" v-if="item.isOwner">
             <el-button-group>
@@ -53,13 +53,17 @@
                   <el-icon><Edit /></el-icon>
                 </el-button>
               </el-tooltip>
-              
-              <el-tooltip v-if="item.status === 0" content="标记为已找回" placement="top">
+
+              <el-tooltip
+                v-if="item.status === 0"
+                content="标记为已找回"
+                placement="top"
+              >
                 <el-button type="success" @click="markFound">
                   <el-icon><Check /></el-icon>
                 </el-button>
               </el-tooltip>
-              
+
               <el-tooltip content="删除失物" placement="top">
                 <el-button type="danger" @click="remove">
                   <el-icon><Delete /></el-icon>
@@ -75,28 +79,20 @@
             <el-icon><InfoFilled /></el-icon>
             基本信息
           </h3>
-          
+
           <div class="info-grid">
-            <div class="info-item">
-              <div class="info-icon">
-                <el-icon><UserFilled /></el-icon>
-              </div>
-              <div class="info-content">
-                <div class="info-label">发布者</div>
-                <div class="info-value">{{ item.username || '匿名' }}</div>
-              </div>
-            </div>
-            
             <div class="info-item">
               <div class="info-icon">
                 <el-icon><Location /></el-icon>
               </div>
               <div class="info-content">
                 <div class="info-label">丢失地点</div>
-                <div class="info-value">{{ item.lostLocation || '未填写' }}</div>
+                <div class="info-value">
+                  {{ item.lostLocation || "未填写" }}
+                </div>
               </div>
             </div>
-            
+
             <div class="info-item">
               <div class="info-icon">
                 <el-icon><Clock /></el-icon>
@@ -106,7 +102,27 @@
                 <div class="info-value">{{ formatTime(item.lostTime) }}</div>
               </div>
             </div>
-            
+
+            <div class="info-item">
+              <div class="info-icon">
+                <el-icon><UserFilled /></el-icon>
+              </div>
+              <div class="info-content">
+                <div class="info-label">发布者</div>
+                <div class="info-value">{{ item.username || "匿名" }}</div>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">
+                <el-icon><Phone /></el-icon>
+              </div>
+              <div class="info-content">
+                <div class="info-label">联系方式</div>
+                <div class="info-value">{{ item.contact || "暂无" }}</div>
+              </div>
+            </div>
+
             <div class="info-item">
               <div class="info-icon">
                 <el-icon><Calendar /></el-icon>
@@ -116,17 +132,7 @@
                 <div class="info-value">{{ formatTime(item.createTime) }}</div>
               </div>
             </div>
-            
-            <div class="info-item">
-              <div class="info-icon">
-                <el-icon><CollectionTag /></el-icon>
-              </div>
-              <div class="info-content">
-                <div class="info-label">物品类别</div>
-                <div class="info-value">{{ item.category }}</div>
-              </div>
-            </div>
-            
+
             <div class="info-item">
               <div class="info-icon">
                 <el-icon><Document /></el-icon>
@@ -134,8 +140,11 @@
               <div class="info-content">
                 <div class="info-label">物品状态</div>
                 <div class="info-value">
-                  <el-tag :type="item.status === 0 ? 'warning' : 'success'" size="small">
-                    {{ item.status === 0 ? '等待找回' : '已找回' }}
+                  <el-tag
+                    :type="item.status === 0 ? 'warning' : 'success'"
+                    size="small"
+                  >
+                    {{ item.status === 0 ? "等待找回" : "已找回" }}
                   </el-tag>
                 </div>
               </div>
@@ -150,7 +159,7 @@
             物品描述
           </h3>
           <div class="description-content">
-            {{ item.description || '暂无详细描述' }}
+            {{ item.description || "暂无详细描述" }}
           </div>
         </div>
 
@@ -190,7 +199,7 @@
             >
               <el-card>
                 <h4>信息发布</h4>
-                <p>用户 {{ item.username || '匿名' }} 发布了这条失物信息</p>
+                <p>用户 {{ item.username || "匿名" }} 发布了这条失物信息</p>
               </el-card>
             </el-timeline-item>
             <el-timeline-item
@@ -204,11 +213,7 @@
                 <p>物品已成功找回</p>
               </el-card>
             </el-timeline-item>
-            <el-timeline-item
-              v-else
-              type="warning"
-              placement="top"
-            >
+            <el-timeline-item v-else type="warning" placement="top">
               <el-card>
                 <h4>等待找回</h4>
                 <p>物品仍在等待找回</p>
@@ -228,115 +233,127 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { ElMessage, ElMessageBox } from "element-plus";
+
 import { 
   Box, Back, Loading, Edit, Check, Delete,
   InfoFilled, Location, Clock, UserFilled, 
-  Calendar, Document, Picture, CollectionTag
+  Calendar, Document, Picture, Phone  // 添加Phone图标
 } from '@element-plus/icons-vue'
-import { getLostItemDetail, updateLostItemStatus, deleteLostItem } from '../../api/lostItem'
+import {
+  getLostItemDetail,
+  updateLostItemStatus,
+  deleteLostItem,
+} from "../../api/lostItem";
 
-const route = useRoute()
-const router = useRouter()
-const item = ref({})
+const route = useRoute();
+const router = useRouter();
+const item = ref({});
 
 // 获取分类标签类型
 const getCategoryTagType = (category) => {
   const typeMap = {
-    '证件': 'primary',
-    '钱包': 'warning',
-    '钥匙': 'info',
-    '电子产品': 'success',
-    '个人物品': '',
-    '其他': 'info'
-  }
-  return typeMap[category] || 'info'
-}
+    证件: "primary",
+    钱包: "warning",
+    钥匙: "info",
+    电子产品: "success",
+    个人物品: "",
+    其他: "info",
+  };
+  return typeMap[category] || "info";
+};
 
 // 加载失物详情
 const load = async () => {
   try {
-    const data = await getLostItemDetail(route.params.id)
-    item.value = data
+    const data = await getLostItemDetail(route.params.id);
+    item.value = data;
   } catch (error) {
-    console.error('加载失败:', error)
-    ElMessage.error('加载失败')
+    console.error("加载失败:", error);
+    ElMessage.error("加载失败");
   }
-}
+};
 
 // 格式化时间
 const formatTime = (time) => {
-  if (!time) return '未填写'
-  const date = new Date(time)
-  return date.toLocaleString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
+  if (!time) return "未填写";
+  const date = new Date(time);
+  return date.toLocaleString("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
 
 // 返回列表
 const goList = () => {
-  const redirect = route.query.redirect
+  const redirect = route.query.redirect;
   if (redirect) {
-    router.push(redirect)
+    router.push(redirect);
   } else {
-    router.push('/lost_item/list')
+    router.push("/lost_item/list");
   }
-}
+};
 
 // 编辑失物信息
 const edit = () => {
-  const redirect = `/lost_item/${route.params.id}`
-  router.push({ path: `/lost_item/edit/${route.params.id}`, query: { redirect } })
-}
+  const redirect = `/lost_item/${route.params.id}`;
+  router.push({
+    path: `/lost_item/edit/${route.params.id}`,
+    query: { redirect },
+  });
+};
 
 // 标记为已找回
 const markFound = async () => {
   try {
-    await ElMessageBox.confirm('确定标记为已找回吗？', '确认操作', {
-      type: 'warning',
-      confirmButtonText: '确定',
-      cancelButtonText: '取消'
-    })
-    
-    await updateLostItemStatus(route.params.id, 1)
-    ElMessage.success('状态已更新')
-    await load()
+    await ElMessageBox.confirm("确定标记为已找回吗？", "确认操作", {
+      type: "warning",
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+    });
+
+    await updateLostItemStatus(route.params.id, 1);
+    ElMessage.success("状态已更新");
+    await load();
   } catch (error) {
-    if (error !== 'cancel') {
-      console.error('操作失败:', error)
-      ElMessage.error('操作失败')
+    if (error !== "cancel") {
+      console.error("操作失败:", error);
+      ElMessage.error("操作失败");
     }
   }
-}
+};
 
 // 删除失物信息
 const remove = async () => {
   try {
-    await ElMessageBox.confirm('确定删除这条失物信息吗？删除后无法恢复。', '确认删除', {
-      type: 'warning',
-      confirmButtonText: '确定删除',
-      cancelButtonText: '取消',
-      confirmButtonClass: 'confirm-delete-btn'
-    })
-    
-    await deleteLostItem(route.params.id)
-    ElMessage.success('删除成功')
-    goList()
+    await ElMessageBox.confirm(
+      "确定删除这条失物信息吗？删除后无法恢复。",
+      "确认删除",
+      {
+        type: "warning",
+        confirmButtonText: "确定删除",
+        cancelButtonText: "取消",
+        confirmButtonClass: "confirm-delete-btn",
+      }
+    );
+
+    await deleteLostItem(route.params.id);
+    ElMessage.success("删除成功");
+    goList();
   } catch (error) {
-    if (error !== 'cancel') {
-      console.error('删除失败:', error)
-      ElMessage.error('删除失败')
+    if (error !== "cancel") {
+      console.error("删除失败:", error);
+      ElMessage.error("删除失败");
     }
   }
-}
+};
 
-onMounted(load)
+onMounted(load);
 </script>
 
 <style scoped>
@@ -413,8 +430,12 @@ onMounted(load)
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .detail-card {
@@ -588,21 +609,21 @@ onMounted(load)
   .header-content {
     padding: 0 16px;
   }
-  
+
   .header-section {
     flex-direction: column;
     gap: 16px;
   }
-  
+
   .action-area .el-button-group {
     width: 100%;
     justify-content: center;
   }
-  
+
   .info-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .item-image {
     max-width: 100%;
   }

@@ -312,6 +312,7 @@ const removeImage = () => {
 };
 
 // 提交表单
+// 在招领编辑组件的handleSubmit函数中修改
 const handleSubmit = async () => {
   try {
     await formRef.value?.validate();
@@ -327,14 +328,14 @@ const handleSubmit = async () => {
     console.log("提交数据:", submitData);
 
     if (isEdit.value) {
-      await updateFoundItem(form.id, submitData);
-      ElMessage.success("更新成功");
-    } else {
-      await publishFoundItem(submitData);
-      ElMessage.success("发布成功");
-    }
-
-    router.push("/found");
+  await updateFoundItem(form.id, submitData);
+  ElMessage.success("更新成功");
+  
+  // 设置一个临时标记
+  sessionStorage.setItem('justEditedFound', 'true');
+  
+  router.push("/profile");
+}
   } catch (error) {
     console.error("提交失败详情:", error.response?.data || error);
     ElMessage.error(error.message || "提交失败");

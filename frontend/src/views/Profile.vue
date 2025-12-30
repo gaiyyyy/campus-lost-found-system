@@ -209,7 +209,19 @@ const loading = ref(false);
 
 onMounted(() => {
   username.value = localStorage.getItem("username") || "未登录用户";
-  fetchMyLostItems();
+  
+  // 检查是否有刚刚编辑招领的标记
+  const justEditedFound = sessionStorage.getItem('justEditedFound') === 'true';
+  
+  if (justEditedFound) {
+    activeMenu.value = 'found';
+    fetchMyFoundItems();
+    // 清除标记，只生效一次
+    sessionStorage.removeItem('justEditedFound');
+  } else {
+    activeMenu.value = 'lost';
+    fetchMyLostItems();
+  }
 });
 
 /* 获取当前用户发布的失物 */

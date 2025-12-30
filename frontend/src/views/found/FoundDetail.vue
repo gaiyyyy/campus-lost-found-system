@@ -26,13 +26,13 @@
         <el-icon class="loading-icon" :size="48"><Loading /></el-icon>
         <p>加载中...</p>
       </div>
-      
+
       <div v-else-if="!foundItem" class="not-found-container">
-        <el-empty description="招领信息不存在" image-size="200">
+        <el-empty description="招领信息不存在" :image-size="200">
           <el-button type="primary" @click="goBack">返回列表</el-button>
         </el-empty>
       </div>
-      
+
       <div v-else>
         <el-card class="detail-card" shadow="hover">
           <!-- 标题和状态 -->
@@ -43,20 +43,23 @@
                 <h2 class="item-title">{{ foundItem.title }}</h2>
               </div>
               <div class="item-meta">
-                <el-tag :type="getCategoryTagType(foundItem.category)" size="small">
+                <el-tag
+                  :type="getCategoryTagType(foundItem.category)"
+                  size="small"
+                >
                   {{ foundItem.category }}
                 </el-tag>
-                <el-tag 
-                  :type="foundItem.status === 0 ? 'warning' : 'success'" 
-                  size="small" 
+                <el-tag
+                  :type="foundItem.status === 0 ? 'warning' : 'success'"
+                  size="small"
                   effect="dark"
                   class="status-tag"
                 >
-                  {{ foundItem.status === 0 ? '待认领' : '已归还' }}
+                  {{ foundItem.status === 0 ? "待认领" : "已归还" }}
                 </el-tag>
               </div>
             </div>
-            
+
             <!-- 操作按钮 -->
             <div class="action-area">
               <el-button-group>
@@ -65,19 +68,23 @@
                     <el-icon><Back /></el-icon>
                   </el-button>
                 </el-tooltip>
-                
+
                 <el-tooltip v-if="isOwner" content="编辑信息" placement="top">
                   <el-button type="primary" @click="handleEdit">
                     <el-icon><Edit /></el-icon>
                   </el-button>
                 </el-tooltip>
-                
-                <el-tooltip v-if="isOwner && foundItem.status === 0" content="标记为已归还" placement="top">
+
+                <el-tooltip
+                  v-if="isOwner && foundItem.status === 0"
+                  content="标记为已归还"
+                  placement="top"
+                >
                   <el-button type="success" @click="updateStatus(1)">
                     <el-icon><Check /></el-icon>
                   </el-button>
                 </el-tooltip>
-                
+
                 <el-tooltip v-if="isOwner" content="删除招领" placement="top">
                   <el-button type="danger" @click="handleDelete">
                     <el-icon><Delete /></el-icon>
@@ -93,7 +100,7 @@
               <el-icon><InfoFilled /></el-icon>
               基本信息
             </h3>
-            
+
             <div class="info-grid">
               <div class="info-item">
                 <div class="info-icon">
@@ -101,50 +108,60 @@
                 </div>
                 <div class="info-content">
                   <div class="info-label">拾到地点</div>
-                  <div class="info-value">{{ foundItem.foundLocation || '未填写' }}</div>
+                  <div class="info-value">
+                    {{ foundItem.foundLocation || "未填写" }}
+                  </div>
                 </div>
               </div>
-              
+
               <div class="info-item">
                 <div class="info-icon">
                   <el-icon><Clock /></el-icon>
                 </div>
                 <div class="info-content">
                   <div class="info-label">拾到时间</div>
-                  <div class="info-value">{{ formatTime(foundItem.foundTime) }}</div>
+                  <div class="info-value">
+                    {{ formatTime(foundItem.foundTime) }}
+                  </div>
                 </div>
               </div>
-              
+
               <div class="info-item">
                 <div class="info-icon">
                   <el-icon><UserFilled /></el-icon>
                 </div>
                 <div class="info-content">
                   <div class="info-label">发布者</div>
-                  <div class="info-value">{{ foundItem.publisherName || '匿名' }}</div>
+                  <div class="info-value">
+                    {{ foundItem.publisherName || "匿名" }}
+                  </div>
                 </div>
               </div>
-              
+
               <div class="info-item">
                 <div class="info-icon">
                   <el-icon><Phone /></el-icon>
                 </div>
                 <div class="info-content">
                   <div class="info-label">联系方式</div>
-                  <div class="info-value">{{ foundItem.contact || '暂无' }}</div>
+                  <div class="info-value">
+                    {{ foundItem.contact || "暂无" }}
+                  </div>
                 </div>
               </div>
-              
+
               <div class="info-item">
                 <div class="info-icon">
                   <el-icon><Calendar /></el-icon>
                 </div>
                 <div class="info-content">
                   <div class="info-label">发布时间</div>
-                  <div class="info-value">{{ formatTime(foundItem.createTime) }}</div>
+                  <div class="info-value">
+                    {{ formatTime(foundItem.createTime) }}
+                  </div>
                 </div>
               </div>
-              
+
               <div class="info-item">
                 <div class="info-icon">
                   <el-icon><Document /></el-icon>
@@ -152,8 +169,11 @@
                 <div class="info-content">
                   <div class="info-label">物品状态</div>
                   <div class="info-value">
-                    <el-tag :type="foundItem.status === 0 ? 'warning' : 'success'" size="small">
-                      {{ foundItem.status === 0 ? '等待认领' : '已归还失主' }}
+                    <el-tag
+                      :type="foundItem.status === 0 ? 'warning' : 'success'"
+                      size="small"
+                    >
+                      {{ foundItem.status === 0 ? "等待认领" : "已归还失主" }}
                     </el-tag>
                   </div>
                 </div>
@@ -168,7 +188,7 @@
               物品描述
             </h3>
             <div class="description-content">
-              {{ foundItem.description || '暂无详细描述' }}
+              {{ foundItem.description || "暂无详细描述" }}
             </div>
           </div>
 
@@ -208,7 +228,10 @@
               >
                 <el-card>
                   <h4>信息发布</h4>
-                  <p>用户 {{ foundItem.publisherName || '匿名' }} 发布了这条招领信息</p>
+                  <p>
+                    用户
+                    {{ foundItem.publisherName || "匿名" }} 发布了这条招领信息
+                  </p>
                 </el-card>
               </el-timeline-item>
               <el-timeline-item
@@ -222,11 +245,7 @@
                   <p>物品已成功归还给失主</p>
                 </el-card>
               </el-timeline-item>
-              <el-timeline-item
-                v-else
-                type="warning"
-                placement="top"
-              >
+              <el-timeline-item v-else type="warning" placement="top">
                 <el-card>
                   <h4>等待认领</h4>
                   <p>物品仍在等待失主认领</p>
@@ -241,40 +260,59 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { 
-  Present, Back, Loading, Box, Edit, Check, Delete,
-  InfoFilled, Location, Clock, UserFilled, Phone, 
-  Calendar, Document, Picture
-} from '@element-plus/icons-vue'
-import { getFoundDetail, deleteFoundItem, updateFoundStatus } from '../../api/found'
+import { ref, onMounted, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { ElMessage, ElMessageBox } from "element-plus";
+import {
+  Present,
+  Back,
+  Loading,
+  Box,
+  Edit,
+  Check,
+  Delete,
+  InfoFilled,
+  Location,
+  Clock,
+  UserFilled,
+  Phone,
+  Calendar,
+  Document,
+  Picture,
+} from "@element-plus/icons-vue";
+import {
+  getFoundDetail,
+  deleteFoundItem,
+  updateFoundStatus,
+} from "../../api/found";
 
-const route = useRoute()
-const router = useRouter()
-const loading = ref(false)
-const foundItem = ref(null)
+const route = useRoute();
+const router = useRouter();
+const loading = ref(false);
+const foundItem = ref(null);
 
 // 计算是否是自己发布的
 const isOwner = computed(() => {
-  const currentUsername = localStorage.getItem('username')
-  return currentUsername && foundItem.value && 
-         currentUsername === foundItem.value.publisherName
-})
+  const currentUsername = localStorage.getItem("username");
+  return (
+    currentUsername &&
+    foundItem.value &&
+    currentUsername === foundItem.value.publisherName
+  );
+});
 
 // 获取分类标签类型
 const getCategoryTagType = (category) => {
   const typeMap = {
-    '证件': 'primary',
-    '钱包': 'warning',
-    '钥匙': 'info',
-    '电子产品': 'success',
-    '个人物品': '',
-    '其他': 'info'
-  }
-  return typeMap[category] || 'info'
-}
+    证件: "primary",
+    钱包: "warning",
+    钥匙: "info",
+    电子产品: "success",
+    个人物品: "",
+    其他: "info",
+  };
+  return typeMap[category] || "info";
+};
 
 // 加载招领详情
 const loadFoundDetail = async () => {
@@ -287,6 +325,21 @@ const loadFoundDetail = async () => {
   loading.value = true
   try {
     const data = await getFoundDetail(id)
+    
+    // 关键调试：查看后端返回的所有字段
+    console.log('后端返回数据:', data)
+    console.log('数据类型:', typeof data)
+    console.log('所有字段:', Object.keys(data))
+    console.log('contact字段值:', data.contact)
+    console.log('contact字段类型:', typeof data.contact)
+    console.log('contact是否为空:', !data.contact)
+    console.log('contact是否为空字符串:', data.contact === '')
+    console.log('contact是否为null:', data.contact === null)
+    console.log('contact是否为undefined:', data.contact === undefined)
+    
+    // 尝试直接赋值一个测试值
+    data.testContact = '测试联系方式123'
+    
     foundItem.value = data
   } catch (error) {
     ElMessage.error('加载失败')
@@ -299,63 +352,67 @@ const loadFoundDetail = async () => {
 
 // 格式化时间
 const formatTime = (time) => {
-  if (!time) return '未知'
-  const date = new Date(time)
-  return date.toLocaleString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
+  if (!time) return "未知";
+  const date = new Date(time);
+  return date.toLocaleString("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
 
 // 返回列表
 const goBack = () => {
-  router.push('/found')
-}
+  router.push("/found");
+};
 
 // 编辑招领信息
 const handleEdit = () => {
-  router.push(`/found/edit/${foundItem.value.id}`)
-}
+  router.push(`/found/edit/${foundItem.value.id}`);
+};
 
 // 删除招领信息
 const handleDelete = async () => {
   try {
-    await ElMessageBox.confirm('确定删除这条招领信息吗？删除后无法恢复。', '确认删除', {
-      type: 'warning',
-      confirmButtonText: '确定删除',
-      cancelButtonText: '取消',
-      confirmButtonClass: 'confirm-delete-btn'
-    })
-    
-    await deleteFoundItem(foundItem.value.id)
-    ElMessage.success('删除成功')
-    router.push('/found')
+    await ElMessageBox.confirm(
+      "确定删除这条招领信息吗？删除后无法恢复。",
+      "确认删除",
+      {
+        type: "warning",
+        confirmButtonText: "确定删除",
+        cancelButtonText: "取消",
+        confirmButtonClass: "confirm-delete-btn",
+      }
+    );
+
+    await deleteFoundItem(foundItem.value.id);
+    ElMessage.success("删除成功");
+    router.push("/found");
   } catch (error) {
-    if (error !== 'cancel') {
-      console.error(error)
+    if (error !== "cancel") {
+      console.error(error);
     }
   }
-}
+};
 
 // 更新状态
 const updateStatus = async (status) => {
   try {
-    await updateFoundStatus(foundItem.value.id, status)
-    ElMessage.success('状态更新成功')
-    loadFoundDetail()
+    await updateFoundStatus(foundItem.value.id, status);
+    ElMessage.success("状态更新成功");
+    loadFoundDetail();
   } catch (error) {
-    console.error(error)
-    ElMessage.error('网络错误')
+    console.error(error);
+    ElMessage.error("网络错误");
   }
-}
+};
 
 // 初始化加载
 onMounted(() => {
-  loadFoundDetail()
-})
+  loadFoundDetail();
+});
 </script>
 
 <style scoped>
@@ -432,8 +489,12 @@ onMounted(() => {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .not-found-container {
@@ -611,21 +672,21 @@ onMounted(() => {
   .header-content {
     padding: 0 16px;
   }
-  
+
   .header-section {
     flex-direction: column;
     gap: 16px;
   }
-  
+
   .action-area .el-button-group {
     width: 100%;
     justify-content: center;
   }
-  
+
   .info-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .item-image {
     max-width: 100%;
   }
