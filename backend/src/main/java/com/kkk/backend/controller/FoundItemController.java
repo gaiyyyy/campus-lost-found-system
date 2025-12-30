@@ -11,7 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -113,11 +115,13 @@ public class FoundItemController {
 
         return list.stream()
                 .map(item -> {
-                    String username = userRepository.findById(item.getUserId())
-                            .map(User::getUsername)
-                            .orElse("未知用户");
+                    User user = userRepository.findById(item.getUserId())
+                            .orElse(new User());  // 防止用户不存在
 
-                    return FoundItemVO.from(item, currentUserId, username);
+                    String username = user.getUsername() != null ? user.getUsername() : "未知用户";
+                    String contact = user.getContact() != null ? user.getContact() : "";
+
+                    return FoundItemVO.from(item, currentUserId, username, contact);
                 })
                 .collect(Collectors.toList());
     }
@@ -127,22 +131,39 @@ public class FoundItemController {
      * GET /found_item/{id}
      */
     @GetMapping("/{id}")
-    public FoundItemVO getFoundItemDetail(
+    public Map<String, Object> getFoundItemDetail(
             @PathVariable Long id,
             HttpServletRequest request
     ) {
         FoundItem item = foundItemService.getFoundItemById(id);
 
+        // 构建 Map，确保所有字段都存在
+        Map<String, Object> result = new HashMap<>();
+
+        // 基本字段
+        result.put("id", item.getId());
+        result.put("title", item.getTitle());
+        result.put("category", item.getCategory());
+        result.put("foundLocation", item.getFoundLocation());
+        result.put("foundTime", item.getFoundTime());
+        result.put("description", item.getDescription());
+        result.put("imageUrl", item.getImageUrl());
+        result.put("status", item.getStatus());
+        result.put("userId", item.getUserId());
+        result.put("createTime", item.getCreateTime());
+
+        // 确保 transient 字段也被放入
+        result.put("publisherName", item.getPublisherName());
+        result.put("contact", item.getContact());
+
+        // 权限信息
         Long uid = null;
         try {
             uid = getCurrentUserId(request);
         } catch (Exception ignored) {}
+        result.put("isOwner", uid != null && uid.equals(item.getUserId()));
 
-        String username = userRepository.findById(item.getUserId())
-                .map(User::getUsername)
-                .orElse("未知用户");
-
-        return FoundItemVO.from(item, uid, username);
+        return result;
     }
 
     /**
@@ -171,11 +192,13 @@ public class FoundItemController {
 
         return list.stream()
                 .map(item -> {
-                    String username = userRepository.findById(item.getUserId())
-                            .map(User::getUsername)
-                            .orElse("未知用户");
+                    User user = userRepository.findById(item.getUserId())
+                            .orElse(new User());  // 防止用户不存在
 
-                    return FoundItemVO.from(item, userId, username);
+                    String username = user.getUsername() != null ? user.getUsername() : "未知用户";
+                    String contact = user.getContact() != null ? user.getContact() : "";
+
+                    return FoundItemVO.from(item, userId, username, contact);
                 })
                 .collect(Collectors.toList());
     }

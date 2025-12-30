@@ -1,6 +1,7 @@
 package com.kkk.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -47,5 +48,6 @@ public class FoundItem {
     private String publisherName;
 
     @Transient
+    @JsonProperty("contact")
     private String contact;
 }

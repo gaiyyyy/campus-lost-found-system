@@ -13,7 +13,10 @@ import java.util.stream.Collectors;
 
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/lost_item")
@@ -126,22 +129,43 @@ public class LostItemController {
      * GET /lost_item/{id}
      */
     @GetMapping("/{id}")
-    public LostItemVO getLostItemDetail(
+    public Map<String, Object> getLostItemDetail(
             @PathVariable Long id,
             HttpServletRequest request
     ) {
         LostItem item = lostItemService.getLostItemById(id);
 
+        // 获取用户信息
+        User user = userRepository.findById(item.getUserId())
+                .orElse(new User());
+
+        // 构建Map，确保包含所有字段
+        Map<String, Object> result = new HashMap<>();
+
+        // 基本字段
+        result.put("id", item.getId());
+        result.put("title", item.getTitle());
+        result.put("category", item.getCategory());
+        result.put("lostLocation", item.getLostLocation());
+        result.put("lostTime", item.getLostTime());
+        result.put("description", item.getDescription());
+        result.put("imageUrl", item.getImageUrl());
+        result.put("status", item.getStatus());
+        result.put("userId", item.getUserId());
+        result.put("createTime", item.getCreateTime());
+
+        // 用户信息字段
+        result.put("username", user.getUsername());
+        result.put("contact", user.getContact() != null ? user.getContact() : "");
+
+        // 权限信息
         Long uid = null;
         try {
             uid = getCurrentUserId(request);
         } catch (Exception ignored) {}
+        result.put("isOwner", uid != null && uid.equals(item.getUserId()));
 
-        String username = userRepository.findById(item.getUserId())
-                .map(User::getUsername)
-                .orElse("未知用户");
-
-        return LostItemVO.from(item, uid, username);
+        return result;
     }
 
 

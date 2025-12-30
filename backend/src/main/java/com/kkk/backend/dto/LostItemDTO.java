@@ -19,4 +19,5 @@ public class LostItemDTO {
     // 新增：用户名
     private String username;
     private String name; // 用户姓名
+    private String contact;
 }
