@@ -84,7 +84,7 @@ INSERT INTO `found_item` (`title`, `category`, `found_location`, `found_time`, `
      - 信息审核与删除
      - 简单统计功能
 - 完成个人界面中“我的招领”部分
-   
+  
 3. **界面优化**
    - 整体UI界面优化
 
@@ -93,4 +93,15 @@ INSERT INTO `found_item` (`title`, `category`, `found_location`, `found_time`, `
 ### ✅ 修复与优化
 
 1. **修复BUG**
-   - 招领信息发布后编辑内容无法提交的问题
+   - 信息发布后编辑内容无法提交的问题
+
+## 📅 2024年12月30日
+
+### ✅ 修复与优化
+
+**修复BUG**
+
+- 在个人界面编辑招领信息发布后跳转到招领列表页的问题
+- 失物和招领列表详细信息中联系方式不显示的问题
+
+## 
