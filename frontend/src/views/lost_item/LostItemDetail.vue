@@ -291,13 +291,23 @@ const formatTime = (time) => {
 
 // 返回列表
 const goList = () => {
-  const redirect = route.query.redirect;
+  // 优先使用路由查询参数中的redirect
+  const redirect = route.query.redirect
   if (redirect) {
-    router.push(redirect);
+    router.push(redirect)
+  } else if (route.query.from === 'admin') {
+    // 如果是从管理员进入的，返回管理员界面
+    router.push('/admin/lost-items')
   } else {
-    router.push("/lost_item/list");
+    // 默认返回用户失物列表
+    const redirect = route.query.redirect
+    if (redirect) {
+      router.push(redirect)
+    } else {
+      router.push('/lost_item/list')
+    }
   }
-};
+}
 
 // 编辑失物信息
 const edit = () => {

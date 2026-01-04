@@ -196,6 +196,7 @@ const form = ref({
   description: ''
 })
 
+
 onMounted(async () => {
   if (props.isEdit) {
     const data = await getLostItemDetail(route.params.id)

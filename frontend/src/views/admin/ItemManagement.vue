@@ -430,10 +430,27 @@ const formatTime = (time) => {
 }
 
 const viewDetail = (id) => {
+  // 构建返回参数
+  const returnPath = isLost.value ? '/admin/lost-items' : '/admin/found-items'
+  
   if (isLost.value) {
-    router.push(`/lost_item/${id}`)
+    // 跳转到失物详情，并传递返回路径
+    router.push({ 
+      path: `/lost_item/${id}`,
+      query: { 
+        redirect: returnPath,
+        from: 'admin'
+      }
+    })
   } else {
-    router.push(`/found/${id}`)
+    // 跳转到招领详情，并传递返回路径
+    router.push({ 
+      path: `/found/${id}`,
+      query: { 
+        redirect: returnPath,
+        from: 'admin'
+      }
+    })
   }
 }
 
@@ -468,8 +485,9 @@ const refresh = () => {
 }
 
 const goBack = () => {
-  router.push('/admin')
-}
+  // 直接返回管理员面板
+  router.push("/admin");
+};
 
 onMounted(() => {
   loadItems()

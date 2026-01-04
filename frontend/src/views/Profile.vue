@@ -155,7 +155,7 @@
               <template #default="{ row }">
                 <div class="action-buttons">
                   <el-button
-                    v-if="row.status === 0" 
+                   
                     size="small" type="primary" @click="editFound(row.id)" > 编辑
                   </el-button>
 
@@ -290,7 +290,10 @@ const fetchMyFoundItems = async () => {
 
 /* 招领相关操作 */
 const editFound = (id) => {
-  router.push(`/found/edit/${id}`);
+  router.push({
+    path: `/found/edit/${id}`,
+    query: { from: 'profile' }  // 标记从profile页面进入
+  });
 };
 
 const deleteFound = async (id) => {

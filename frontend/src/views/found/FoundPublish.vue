@@ -312,7 +312,7 @@ const removeImage = () => {
 };
 
 // 提交表单
-// 在招领编辑组件的handleSubmit函数中修改
+// 提交表单
 const handleSubmit = async () => {
   try {
     await formRef.value?.validate();
@@ -328,14 +328,26 @@ const handleSubmit = async () => {
     console.log("提交数据:", submitData);
 
     if (isEdit.value) {
-  await updateFoundItem(form.id, submitData);
-  ElMessage.success("更新成功");
-  
-  // 设置一个临时标记
-  sessionStorage.setItem('justEditedFound', 'true');
-  
-  router.push("/profile");
-}
+      await updateFoundItem(form.id, submitData);
+      ElMessage.success("更新成功");
+      
+      // 判断是从哪里进入编辑页的
+      const fromPath = route.query.from; // 通过查询参数获取来源
+      
+      if (fromPath === 'profile') {
+        // 从"我的招领"进入的编辑，返回Profile页面并显示招领标签页
+        sessionStorage.setItem('justEditedFound', 'true');
+        router.push("/profile");
+      } else {
+        // 默认从招领详情进入编辑，返回招领详情页
+        router.push(`/found/${form.id}`);
+      }
+    } else {
+      await publishFoundItem(submitData);
+      ElMessage.success("发布成功");
+      // 发布后返回招领列表页
+      router.push("/found");
+    }
   } catch (error) {
     console.error("提交失败详情:", error.response?.data || error);
     ElMessage.error(error.message || "提交失败");

@@ -365,7 +365,17 @@ const formatTime = (time) => {
 
 // 返回列表
 const goBack = () => {
-  router.push("/found");
+  const from = route.query.from;
+  const redirect = route.query.redirect;
+  
+  // 判断来源
+  if (from === 'admin') {
+    // 从管理员界面来
+    router.push(redirect || "/admin/found-items");
+  } else {
+    // 默认返回招领列表
+    router.push("/found");
+  }
 };
 
 // 编辑招领信息
